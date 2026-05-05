@@ -279,30 +279,103 @@
   }
 
   .about-visual {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-    grid-template-areas:
-      "a a b"
-      "c d b"
-      "c e e";
-    gap: 3px;
+    position: relative;
     height: 500px;
+    background: var(--black);
     overflow: hidden;
+    border: 1px solid rgba(200,245,66,0.12);
   }
 
-  .about-collage-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+  .av-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,245,66,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,245,66,0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
   }
 
-  .about-collage-img:nth-child(1) { grid-area: a; }
-  .about-collage-img:nth-child(2) { grid-area: b; }
-  .about-collage-img:nth-child(3) { grid-area: c; }
-  .about-collage-img:nth-child(4) { grid-area: d; }
-  .about-collage-img:nth-child(5) { grid-area: e; }
+  .av-cross-h {
+    position: absolute;
+    top: 50%; left: 0; right: 0;
+    height: 1px;
+    background: rgba(200,245,66,0.07);
+  }
+
+  .av-cross-v {
+    position: absolute;
+    left: 50%; top: 0; bottom: 0;
+    width: 1px;
+    background: rgba(200,245,66,0.07);
+  }
+
+  .av-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(200,245,66,0.22);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .av-ring-1 { width: 240px; height: 240px; animation: avPulse 7s ease-in-out infinite; }
+  .av-ring-2 { width: 140px; height: 140px; animation: avPulse 7s ease-in-out infinite 2.3s; }
+  .av-ring-3 { width: 56px; height: 56px; background: rgba(200,245,66,0.04); animation: avPulse 7s ease-in-out infinite 4.6s; }
+
+  @keyframes avPulse {
+    0%, 100% { opacity: 0.2; transform: translate(-50%, -50%) scale(1); }
+    50%       { opacity: 0.55; transform: translate(-50%, -50%) scale(1.06); }
+  }
+
+  .av-scan {
+    position: absolute;
+    left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(200,245,66,0.7) 50%, transparent 100%);
+    animation: avScan 9s linear infinite;
+  }
+
+  @keyframes avScan {
+    0%   { top: 0; }
+    100% { top: 100%; }
+  }
+
+  .av-corner {
+    position: absolute;
+    width: 18px; height: 18px;
+    border-color: var(--accent);
+    border-style: solid;
+    opacity: 0.55;
+  }
+
+  .av-c-tl { top: 20px; left: 20px; border-width: 1px 0 0 1px; }
+  .av-c-tr { top: 20px; right: 20px; border-width: 1px 1px 0 0; }
+  .av-c-bl { bottom: 20px; left: 20px; border-width: 0 0 1px 1px; }
+  .av-c-br { bottom: 20px; right: 20px; border-width: 0 1px 1px 0; }
+
+  .av-line {
+    position: absolute;
+    left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,245,66,0.18), transparent);
+  }
+
+  .av-line-a { top: 33%; animation: avFade 8s ease-in-out infinite; }
+  .av-line-b { top: 67%; animation: avFade 8s ease-in-out infinite 4s; }
+
+  @keyframes avFade {
+    0%, 100% { opacity: 0; }
+    50%       { opacity: 1; }
+  }
+
+  .av-label {
+    position: absolute;
+    bottom: 20px; right: 22px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.28em;
+    color: rgba(200,245,66,0.28);
+    animation: avFade 5s ease-in-out infinite;
+  }
 
   .service-pill {
     background: var(--mid);
@@ -777,11 +850,20 @@
   </div>
 
   <div class="about-visual reveal">
-    <img class="about-collage-img" src="komolebi_cypher.jpg" alt="KOMOLEBI × 梅田サイファー">
-    <img class="about-collage-img" src="izoh_thumb.jpg" alt="DJ IZOH">
-    <img class="about-collage-img" src="https://img.youtube.com/vi/YZJ0HqflWn8/maxresdefault.jpg" alt="BEAMS × ふくべ鍛治">
-    <img class="about-collage-img" src="https://img.youtube.com/vi/1Gg8hKyNDVw/maxresdefault.jpg" alt="NOTONOWILD">
-    <img class="about-collage-img" src="https://img.youtube.com/vi/pLjNlkY336Q/maxresdefault.jpg" alt="手取川150周年">
+    <div class="av-grid"></div>
+    <div class="av-cross-h"></div>
+    <div class="av-cross-v"></div>
+    <div class="av-ring av-ring-1"></div>
+    <div class="av-ring av-ring-2"></div>
+    <div class="av-ring av-ring-3"></div>
+    <div class="av-scan"></div>
+    <div class="av-corner av-c-tl"></div>
+    <div class="av-corner av-c-tr"></div>
+    <div class="av-corner av-c-bl"></div>
+    <div class="av-corner av-c-br"></div>
+    <div class="av-line av-line-a"></div>
+    <div class="av-line av-line-b"></div>
+    <div class="av-label">IMAZIATION</div>
   </div>
 </section>
 
