@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SNS運用代行プラン | imaziation inc.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Sans+JP:wght@300;400;700&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f2ed;
+    --black: #111;
+    --white: #f5f2ed;
+    --gold: #b8960c;
+    --mid: #ddd8d0;
+    --text: #2a2a2a;
+    --muted: #888;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  .cursor { width: 8px; height: 8px; background: var(--gold); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; }
+  .cursor-ring { width: 32px; height: 32px; border: 1px solid var(--gold); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; opacity: 0.4; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 24px 56px; background: rgba(245,242,237,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--mid); }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; letter-spacing: 0.3em; color: var(--black); text-decoration: none; }
+  .nav-cta { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--white); background: var(--black); padding: 12px 28px; text-decoration: none; text-transform: uppercase; transition: background 0.3s; cursor: none; }
+  .nav-cta:hover { background: var(--gold); }
+
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1.2fr 0.8fr; align-items: end; padding: 120px 56px 80px; gap: 80px; border-bottom: 1px solid var(--mid); }
+  .hero-left { opacity: 0; animation: fadeUp 1s ease 0.3s forwards; }
+  .hero-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.3em; color: var(--gold); text-transform: uppercase; margin-bottom: 32px; }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(60px, 7.5vw, 120px); line-height: 0.9; font-weight: 300; color: var(--black); margin-bottom: 48px; }
+  .hero-title em { font-style: italic; color: var(--gold); }
+  .hero-desc { font-size: 14px; line-height: 2.2; color: var(--muted); max-width: 420px; letter-spacing: 0.03em; border-left: 2px solid var(--gold); padding-left: 24px; }
+  .hero-desc strong { color: var(--text); font-weight: 400; }
+  .hero-right { opacity: 0; animation: fadeUp 1s ease 0.6s forwards; padding-bottom: 8px; }
+
+  .section-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.3em; color: var(--gold); text-transform: uppercase; margin-bottom: 16px; }
+
+  .why { padding: 120px 56px; border-bottom: 1px solid var(--mid); }
+  .why-header { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; align-items: start; margin-bottom: 80px; }
+  .why-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 5vw, 80px); line-height: 0.9; font-weight: 300; }
+  .why-title em { font-style: italic; color: var(--gold); }
+  .why-intro { font-size: 16px; line-height: 2.2; color: var(--text); letter-spacing: 0.03em; padding-top: 16px; }
+  .why-intro strong { font-weight: 400; border-bottom: 1px solid var(--gold); }
+  .why-points { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--mid); border: 1px solid var(--mid); }
+  .why-point { background: var(--bg); padding: 40px 32px; transition: background 0.3s; }
+  .why-point:hover { background: #eee8df; }
+  .why-num { font-family: 'Cormorant Garamond', serif; font-size: 48px; color: var(--gold); font-weight: 300; line-height: 1; margin-bottom: 20px; opacity: 0.6; }
+  .why-point-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; margin-bottom: 12px; color: var(--black); }
+  .why-point-desc { font-size: 12px; line-height: 1.9; color: var(--muted); letter-spacing: 0.03em; }
+
+  .plans { padding: 120px 56px; border-bottom: 1px solid var(--mid); }
+  .plans-header { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; margin-bottom: 64px; align-items: end; }
+  .plans-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 5vw, 80px); font-weight: 300; line-height: 0.9; }
+  .plans-title em { font-style: italic; color: var(--gold); }
+  .plans-note-text { font-size: 13px; line-height: 2; color: var(--muted); letter-spacing: 0.03em; }
+  .plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--mid); border: 1px solid var(--mid); margin-bottom: 32px; }
+  .plan-card { background: var(--bg); padding: 48px 36px; position: relative; transition: background 0.3s; }
+  .plan-card:hover { background: #eee8df; }
+  .plan-card.featured { background: var(--black); }
+  .plan-card.featured:hover { background: #1a1a1a; }
+  .plan-card.featured::before { content: '人気'; position: absolute; top: 20px; right: 20px; background: var(--gold); color: var(--white); font-family: 'Noto Sans JP', sans-serif; font-size: 10px; letter-spacing: 0.1em; padding: 4px 12px; }
+  .plan-name { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 400; letter-spacing: 0.05em; margin-bottom: 8px; }
+  .plan-name-ja { font-size: 11px; color: var(--muted); letter-spacing: 0.15em; margin-bottom: 24px; }
+  .plan-card.featured .plan-name { color: var(--white); }
+  .plan-card.featured .plan-name-ja { color: rgba(245,242,237,0.4); }
+  .plan-divider { width: 40px; height: 1px; background: var(--gold); margin-bottom: 28px; opacity: 0.4; }
+  .plan-price { font-family: 'Cormorant Garamond', serif; font-size: 52px; font-weight: 300; color: var(--gold); line-height: 1; margin-bottom: 4px; }
+  .plan-price-note { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 32px; font-family: 'Space Mono', monospace; }
+  .plan-card.featured .plan-price-note { color: rgba(245,242,237,0.3); }
+  .plan-features { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .plan-features li { font-size: 12px; color: var(--muted); letter-spacing: 0.03em; display: flex; gap: 10px; align-items: flex-start; line-height: 1.6; }
+  .plan-card.featured .plan-features li { color: rgba(245,242,237,0.55); }
+  .plan-features li::before { content: '—'; color: var(--gold); font-size: 10px; flex-shrink: 0; }
+
+  .common-note { background: var(--black); padding: 32px 40px; display: flex; gap: 48px; align-items: flex-start; }
+  .common-note-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--gold); white-space: nowrap; padding-top: 2px; }
+  .common-note-list { display: flex; flex-direction: column; gap: 8px; }
+  .common-note-list li { font-size: 12px; color: rgba(245,242,237,0.5); line-height: 1.8; letter-spacing: 0.03em; list-style: none; display: flex; gap: 10px; align-items: flex-start; }
+  .common-note-list li::before { content: '—'; color: var(--gold); opacity: 0.5; flex-shrink: 0; }
+
+  .compare { padding: 0 56px 120px; border-bottom: 1px solid var(--mid); }
+  .compare-title { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; margin-bottom: 32px; color: var(--black); }
+  .compare-table { width: 100%; border-collapse: collapse; }
+  .compare-table th, .compare-table td { padding: 18px 24px; text-align: left; border-bottom: 1px solid var(--mid); font-size: 12px; letter-spacing: 0.03em; }
+  .compare-table th { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--gold); font-weight: 400; background: var(--black); padding: 20px 24px; }
+  .compare-table td:first-child { color: var(--text); font-size: 13px; }
+  .compare-table td:not(:first-child) { color: var(--muted); text-align: center; }
+  .compare-table tr:hover td { background: #eee8df; }
+  .check { color: var(--gold); }
+  .dash { color: var(--mid); }
+
+  .flow { padding: 100px 56px; border-bottom: 1px solid var(--mid); }
+  .flow-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 5vw, 80px); font-weight: 300; line-height: 0.9; margin-bottom: 64px; }
+  .flow-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--mid); border: 1px solid var(--mid); }
+  .flow-step { background: var(--bg); padding: 36px 28px; transition: background 0.3s; }
+  .flow-step:hover { background: #eee8df; }
+  .flow-num { font-family: 'Cormorant Garamond', serif; font-size: 40px; color: var(--gold); font-weight: 300; line-height: 1; margin-bottom: 16px; opacity: 0.5; }
+  .flow-step-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; margin-bottom: 10px; color: var(--black); }
+  .flow-step-desc { font-size: 11px; color: var(--muted); line-height: 1.9; letter-spacing: 0.03em; }
+
+  .faq { padding: 100px 56px; border-bottom: 1px solid var(--mid); background: var(--black); }
+  .faq-header { margin-bottom: 56px; }
+  .faq-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 5vw, 80px); font-weight: 300; color: var(--white); line-height: 0.9; }
+  .faq-title em { font-style: italic; color: var(--gold); }
+  .faq-list { display: flex; flex-direction: column; gap: 1px; }
+  .faq-item { background: #1a1a1a; padding: 36px 40px; }
+  .faq-q { font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--white); margin-bottom: 16px; display: flex; gap: 20px; align-items: flex-start; }
+  .faq-q::before { content: 'Q.'; color: var(--gold); font-style: italic; flex-shrink: 0; }
+  .faq-a { font-size: 13px; color: rgba(245,242,237,0.5); line-height: 2; letter-spacing: 0.03em; padding-left: 32px; }
+
+  .contact { padding: 120px 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .contact-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(56px, 7vw, 100px); font-weight: 300; line-height: 0.9; color: var(--black); margin-bottom: 32px; }
+  .contact-title em { font-style: italic; color: var(--gold); }
+  .contact-sub { font-size: 13px; line-height: 2.2; color: var(--muted); margin-bottom: 48px; letter-spacing: 0.05em; }
+  .cta-btn { display: inline-flex; align-items: center; gap: 16px; background: var(--gold); color: var(--white); padding: 20px 48px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; transition: all 0.3s; cursor: none; }
+  .cta-btn:hover { background: var(--black); color: var(--white); transform: translateX(4px); }
+  .cta-btn::after { content: '→'; }
+  .contact-info { display: flex; flex-direction: column; }
+  .contact-row { display: flex; gap: 24px; align-items: center; padding: 24px 0; border-bottom: 1px solid var(--mid); }
+  .contact-row:first-child { border-top: 1px solid var(--mid); }
+  .contact-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--gold); min-width: 80px; }
+  .contact-value { font-size: 13px; color: var(--muted); letter-spacing: 0.05em; }
+
+  footer { padding: 28px 56px; background: var(--black); border-top: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
+  .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 16px; letter-spacing: 0.3em; color: rgba(245,242,237,0.2); }
+  .footer-back { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: rgba(245,242,237,0.3); text-decoration: none; text-transform: uppercase; transition: color 0.3s; }
+  .footer-back:hover { color: var(--gold); }
+  .footer-copy { font-family: 'Space Mono', monospace; font-size: 10px; color: rgba(245,242,237,0.2); letter-spacing: 0.1em; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; }
+    .why { padding: 80px 24px; } .why-header { grid-template-columns: 1fr; gap: 32px; } .why-points { grid-template-columns: 1fr 1fr; }
+    .plans { padding: 80px 24px; } .plans-header { grid-template-columns: 1fr; gap: 24px; } .plans-grid { grid-template-columns: 1fr; }
+    .common-note { flex-direction: column; gap: 16px; padding: 24px; }
+    .compare { padding: 0 24px 80px; }
+    .compare-table th, .compare-table td { padding: 12px 16px; font-size: 11px; }
+    .flow { padding: 80px 24px; } .flow-steps { grid-template-columns: 1fr 1fr; }
+    .faq { padding: 80px 24px; }
+    .contact { grid-template-columns: 1fr; padding: 80px 24px; gap: 40px; }
+    footer { flex-direction: column; gap: 16px; text-align: center; padding: 28px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="./imaziation.html" class="nav-logo" style="display:flex;flex-direction:column;gap:2px;">imaziation<span style="font-family:'Noto Sans JP',sans-serif;font-size:8px;letter-spacing:0.15em;color:rgba(42,42,42,0.4);font-weight:300;">イマジエーション</span></a>
+  <a href="#contact" class="nav-cta">無料相談する</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-label">// SNS Management — imaziation inc.</div>
+    <h1 class="hero-title">投稿を、<br><em>戦略に</em><br>変える。</h1>
+    <p class="hero-desc">
+      SNSは「なんとなく更新する」だけでは届きません。<br>
+      <strong>文案・編集・投稿・撮影</strong>——全部まとめてお任せください。<br>
+      imaziationが、あなたのブランドをSNSで育てます。
+    </p>
+  </div>
+  <div class="hero-right">
+    <div style="display:flex;flex-direction:column;gap:32px;">
+      <div style="border-left:2px solid rgba(184,150,12,0.3);padding-left:24px;">
+        <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.25em;color:var(--gold);margin-bottom:16px;">// WHAT WE HANDLE</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text);letter-spacing:0.05em;">文案・キャプション作成</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text);letter-spacing:0.05em;">写真・動画の編集加工</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text);letter-spacing:0.05em;">投稿スケジュール管理</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text);letter-spacing:0.05em;">現場撮影（オプション）</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text);letter-spacing:0.05em;">レポート・改善提案</div>
+        </div>
+      </div>
+      <div style="background:var(--black);padding:28px 32px;">
+        <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.2em;color:var(--gold);margin-bottom:12px;">// MONTHLY FROM</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:64px;font-weight:300;color:var(--white);line-height:1;">¥66,000</div>
+        <div style="font-family:'Space Mono',monospace;font-size:10px;color:rgba(245,242,237,0.3);margin-bottom:16px;letter-spacing:0.1em;">/月（税別）〜</div>
+        <div style="font-size:12px;color:rgba(245,242,237,0.5);line-height:1.9;letter-spacing:0.03em;">文案・編集・投稿代行込み。<br>相談・見積は無料です。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="why">
+  <div class="why-header reveal">
+    <div>
+      <div class="section-label">// Why SNS Management</div>
+      <h2 class="why-title">なぜ、<br>プロに<br><em>任せるか</em></h2>
+    </div>
+    <div>
+      <p class="why-intro">
+        SNSは「毎日更新すれば伸びる」ほど単純ではありません。<br>
+        <strong>世界観の一貫性</strong>、投稿のタイミング、言葉の選び方——<br>
+        すべてが噛み合って、はじめてフォロワーに届きます。<br><br>
+        imaziationは、あなたのブランドを深く理解した上で、<br>
+        SNSを「集客の仕組み」として機能させます。
+      </p>
+    </div>
+  </div>
+  <div class="why-points reveal">
+    <div class="why-point">
+      <div class="why-num">01</div>
+      <div class="why-point-title">世界観を崩さない</div>
+      <div class="why-point-desc">フォントや色だけでなく、言葉のトーンや投稿の雰囲気まで、あなたのブランドに合わせて統一します。バラバラな印象を与えません。</div>
+    </div>
+    <div class="why-point">
+      <div class="why-num">02</div>
+      <div class="why-point-title">手間をゼロにする</div>
+      <div class="why-point-desc">素材を送るだけで、文案・編集・投稿まで全部完結。忙しい経営者・店主が本業に集中できるよう、SNS運用の手間を丸ごと引き受けます。</div>
+    </div>
+    <div class="why-point">
+      <div class="why-num">03</div>
+      <div class="why-point-title">撮影も一緒に動ける</div>
+      <div class="why-point-desc">素材がなくても大丈夫。大阪府内は交通費無料で現場撮影に対応。Web・映像制作と連動した一気通貫のクリエイティブ支援が強みです。</div>
+    </div>
+    <div class="why-point">
+      <div class="why-num">04</div>
+      <div class="why-point-title">データで改善し続ける</div>
+      <div class="why-point-desc">「なんとなく投稿」で終わらせません。スタンダード以上では反応データをもとに投稿内容・タイミングを継続的に改善していきます。</div>
+    </div>
+  </div>
+</section>
+
+<section class="plans">
+  <div class="plans-header reveal">
+    <div>
+      <div class="section-label">// Plans</div>
+      <h2 class="plans-title">SNS運用<br><em>プラン</em></h2>
+    </div>
+    <div>
+      <p class="plans-note-text">すべて税別表記・月額契約です。素材（写真・動画）はクライアントご提供が基本となります。文案・編集・投稿代行はすべてのプランに含まれます。大阪府内の撮影交通費は無料、遠方は実費となります。まずはお気軽にご相談ください。</p>
+    </div>
+  </div>
+  <div class="plans-grid reveal">
+    <div class="plan-card">
+      <div class="plan-name">Light</div>
+      <div class="plan-name-ja">ライト — まず始めたい方に</div>
+      <div class="plan-divider"></div>
+      <div class="plan-price">¥66,000</div>
+      <div class="plan-price-note">/月（税別）</div>
+      <ul class="plan-features">
+        <li>投稿 4〜6本 / 月</li>
+        <li>撮影なし（素材クライアント提供）</li>
+        <li>追加撮影 ¥30,000 / 回</li>
+        <li>対応媒体 1媒体</li>
+        <li>文案・編集・投稿代行込み</li>
+        <li>レポートなし</li>
+      </ul>
+    </div>
+    <div class="plan-card featured">
+      <div class="plan-name">Standard</div>
+      <div class="plan-name-ja">スタンダード — 安定して運用したい方に</div>
+      <div class="plan-divider"></div>
+      <div class="plan-price">¥100,000</div>
+      <div class="plan-price-note">/月（税別）</div>
+      <ul class="plan-features">
+        <li>投稿 8〜10本 / 月</li>
+        <li>月1回 撮影込み</li>
+        <li>追加撮影 ¥20,000 / 回</li>
+        <li>対応媒体 1〜2媒体</li>
+        <li>文案・編集・投稿代行込み</li>
+        <li>簡易レポート（月次）</li>
+      </ul>
+    </div>
+    <div class="plan-card">
+      <div class="plan-name">Premium</div>
+      <div class="plan-name-ja">プレミアム — 本気でSNSを育てたい方に</div>
+      <div class="plan-divider"></div>
+      <div class="plan-price">¥170,000</div>
+      <div class="plan-price-note">/月（税別）</div>
+      <ul class="plan-features">
+        <li>投稿 12〜15本 / 月</li>
+        <li>月2回 撮影込み</li>
+        <li>追加撮影 ¥15,000 / 回</li>
+        <li>対応媒体 最大3媒体</li>
+        <li>文案・編集・投稿代行込み</li>
+        <li>詳細レポート（月次）</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="common-note reveal">
+    <div class="common-note-label">// COMMON</div>
+    <ul class="common-note-list">
+      <li>素材（写真・動画）はクライアントご提供が基本です</li>
+      <li>文案作成・編集加工・投稿代行はすべてのプランに含まれます</li>
+      <li>大阪府内の撮影交通費は無料、府外は実費となります</li>
+      <li>対応媒体：Instagram / X（旧Twitter）/ Facebook など</li>
+    </ul>
+  </div>
+
+  <div class="compare reveal">
+    <div class="compare-title" style="padding-top:48px;">プラン比較</div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>サービス内容</th>
+          <th>Light</th>
+          <th>Standard</th>
+          <th>Premium</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>月額料金（税別）</td><td>¥66,000</td><td class="check">¥100,000</td><td>¥170,000</td></tr>
+        <tr><td>投稿本数 / 月</td><td>4〜6本</td><td class="check">8〜10本</td><td class="check">12〜15本</td></tr>
+        <tr><td>撮影</td><td class="dash">なし</td><td class="check">月1回込み</td><td class="check">月2回込み</td></tr>
+        <tr><td>追加撮影料金</td><td>¥30,000 / 回</td><td>¥20,000 / 回</td><td class="check">¥15,000 / 回</td></tr>
+        <tr><td>対応媒体数</td><td>1媒体</td><td>1〜2媒体</td><td class="check">最大3媒体</td></tr>
+        <tr><td>文案・編集・投稿代行</td><td class="check">◯</td><td class="check">◯</td><td class="check">◯</td></tr>
+        <tr><td>月次レポート</td><td class="dash">—</td><td class="check">簡易</td><td class="check">詳細</td></tr>
+        <tr><td>大阪府内交通費</td><td class="check">無料</td><td class="check">無料</td><td class="check">無料</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="flow">
+  <div class="reveal">
+    <div class="section-label">// How to Start</div>
+    <h2 class="flow-title">始め方</h2>
+  </div>
+  <div class="flow-steps reveal">
+    <div class="flow-step">
+      <div class="flow-num">01</div>
+      <div class="flow-step-title">無料相談</div>
+      <div class="flow-step-desc">メールまたはInstagramよりご連絡ください。現在の運用状況・目標・媒体をヒアリングします。</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">02</div>
+      <div class="flow-step-title">プラン提案</div>
+      <div class="flow-step-desc">目標・投稿頻度・予算に合わせて最適なプランをご提案。カスタムプランも相談可能です。</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">03</div>
+      <div class="flow-step-title">ヒアリング</div>
+      <div class="flow-step-desc">ブランドの世界観・トーン・禁止事項など、投稿方針を丁寧にすり合わせます。</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">04</div>
+      <div class="flow-step-title">運用開始</div>
+      <div class="flow-step-desc">翌月より代行スタート。素材を送るだけで、投稿まで全部こちらで完結します。</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">05</div>
+      <div class="flow-step-title">改善・継続</div>
+      <div class="flow-step-desc">月次レポート（スタンダード以上）をもとに投稿内容・タイミングを継続的に改善します。</div>
+    </div>
+  </div>
+</section>
+
+<section class="faq">
+  <div class="faq-header reveal">
+    <div class="section-label" style="color:rgba(184,150,12,0.8);">// FAQ</div>
+    <h2 class="faq-title">よくある<br><em>質問</em></h2>
+  </div>
+  <div class="faq-list reveal">
+    <div class="faq-item">
+      <div class="faq-q">素材は必ず自分たちで用意しないといけませんか？</div>
+      <div class="faq-a">基本的には素材（写真・動画）はクライアントさんにご提供いただきます。ただし、スタンダード・プレミアムには撮影が月1〜2回含まれており、ライトプランでも追加撮影オプション（¥30,000/回）をご利用いただけます。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">対応できる媒体はどれですか？</div>
+      <div class="faq-a">Instagram、X（旧Twitter）、Facebook、TikTok、Threadsなど主要SNSに対応しています。ご希望の媒体をご相談ください。プランによって対応媒体数が異なります。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">投稿前に内容を確認できますか？</div>
+      <div class="faq-a">はい、投稿前に必ずご確認いただけます。文案・画像・ハッシュタグをまとめてご共有し、承認をいただいてから投稿します。修正のご要望にも対応します。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">大阪府外でも対応できますか？</div>
+      <div class="faq-a">もちろん対応可能です。文案・編集・投稿代行はオンラインで全国どこでも承ります。撮影が必要な場合は大阪府外への出張も可能ですが、交通費は実費となります。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">契約期間の縛りはありますか？</div>
+      <div class="faq-a">ありません。月単位でのご契約となります。ただし、SNS運用は継続することで成果が出やすいため、最低3ヶ月程度のご継続をおすすめしています。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Web制作や映像制作と合わせて依頼できますか？</div>
+      <div class="faq-a">はい、ぜひご検討ください。imaziationはWeb制作・映像制作・SNS運用を一気通貫で対応できます。まとめてご依頼いただくと、ブランドの一貫性がより高まり、効果的です。</div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="reveal">
+    <div class="section-label">// Contact</div>
+    <h2 class="contact-title">まず、<br><em>話しましょう。</em></h2>
+    <p class="contact-sub">相談・見積は無料です。<br>「どのプランが合うか分からない」でも大丈夫。<br>一緒に考えます。</p>
+    <a href="mailto:imaziation@gmail.com" class="cta-btn">無料相談する</a>
+  </div>
+  <div class="contact-info reveal">
+    <div class="contact-row"><div class="contact-label">Mail</div><div class="contact-value">imaziation@gmail.com</div></div>
+    <div class="contact-row"><div class="contact-label">Instagram</div><div class="contact-value">@imaziation.inc</div></div>
+    <div class="contact-row"><div class="contact-label">Location</div><div class="contact-value">大阪府摂津市千里丘</div></div>
+    <div class="contact-row"><div class="contact-label">Response</div><div class="contact-value">2営業日以内にご返信します</div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">imaziation inc.</div>
+  <a href="./imaziation.html" class="footer-back">← 会社サイトへ戻る</a>
+  <div class="footer-copy">© 2026 株式会社imaziation</div>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx - 5 + 'px';
+    cursor.style.top = my - 5 + 'px';
+  });
+  function animRing() {
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx - 18 + 'px'; ring.style.top = ry - 18 + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
