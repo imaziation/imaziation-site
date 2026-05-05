@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WEB制作 | imaziation inc.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Sans+JP:wght@300;400;700&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f2ed;
+    --black: #111;
+    --white: #f5f2ed;
+    --gold: #b8960c;
+    --mid: #ddd8d0;
+    --text: #2a2a2a;
+    --muted: #888;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  .cursor { width: 8px; height: 8px; background: var(--gold); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; }
+  .cursor-ring { width: 32px; height: 32px; border: 1px solid var(--gold); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; opacity: 0.4; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 24px 56px; background: rgba(245,242,237,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--mid); }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; letter-spacing: 0.3em; color: var(--black); text-decoration: none; }
+  .nav-cta { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--white); background: var(--black); padding: 12px 28px; text-decoration: none; text-transform: uppercase; transition: background 0.3s; cursor: none; }
+  .nav-cta:hover { background: var(--gold); }
+
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1.2fr 0.8fr; align-items: end; padding: 120px 56px 80px; gap: 80px; border-bottom: 1px solid var(--mid); }
+  .hero-left { opacity: 0; animation: fadeUp 1s ease 0.3s forwards; }
+  .hero-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.3em; color: var(--gold); text-transform: uppercase; margin-bottom: 32px; }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(64px, 8vw, 130px); line-height: 0.9; font-weight: 300; color: var(--black); margin-bottom: 48px; }
+  .hero-title em { font-style: italic; color: var(--gold); }
+  .hero-desc { font-size: 14px; line-height: 2.2; color: var(--muted); max-width: 420px; letter-spacing: 0.03em; border-left: 2px solid var(--gold); padding-left: 24px; }
+  .hero-desc strong { color: var(--text); font-weight: 400; }
+  .hero-right { opacity: 0; animation: fadeUp 1s ease 0.6s forwards; padding-bottom: 8px; }
+  .hero-price-block { background: var(--black); padding: 48px 40px; position: relative; }
+  .hero-price-block::before { content: ''; position: absolute; top: 8px; right: -8px; bottom: -8px; left: 8px; border: 1px solid var(--gold); pointer-events: none; opacity: 0.3; }
+  .hero-price-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.25em; color: var(--gold); margin-bottom: 24px; }
+  .hero-price { font-family: 'Cormorant Garamond', serif; font-size: 80px; color: var(--white); line-height: 1; font-weight: 300; }
+  .hero-price-sub { font-size: 12px; color: rgba(245,242,237,0.4); letter-spacing: 0.1em; margin-top: 8px; margin-bottom: 32px; }
+  .hero-price-note { font-size: 12px; color: rgba(245,242,237,0.6); line-height: 1.9; letter-spacing: 0.03em; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 24px; }
+
+  .section-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.3em; color: var(--gold); text-transform: uppercase; margin-bottom: 16px; }
+
+  .why { padding: 120px 56px; border-bottom: 1px solid var(--mid); }
+  .why-header { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; align-items: start; margin-bottom: 80px; }
+  .why-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 5vw, 80px); line-height: 0.9; font-weight: 300; }
+  .why-title em { font-style: italic; color: var(--gold); }
+  .why-intro { font-size: 16px; line-height: 2.2; color: var(--text); letter-spacing: 0.03em; padding-top: 16px; }
+  .why-intro strong { font-weight: 400; border-bottom: 1px solid var(--gold); }
+  .why-points { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--mid); border: 1px solid var(--mid); }
+  .why-point { background: var(--bg); padding: 40px 32px; transition: background 0.3s; }
+  .why-point:hover { background: #eee8df; }
+  .why-num { font-family: 'Cormorant Garamond', serif; font-size: 48px; color: var(--gold); font-weight: 300; line-height: 1; margin-bottom: 20px; opacity: 0.6; }
+  .why-point-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; margin-bottom: 12px; color: var(--black); }
+  .why-point-desc { font-size: 12px; line-height: 1.9; color: var(--muted); letter-spacing: 0.03em; }
+
+  .works { padding: 100px 56px; border-bottom: 1px solid var(--mid); background: var(--black); }
+  .works-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 5vw, 80px); font-weight: 300; color: var(--white); margin-bottom: 16px; }
+  .works-sub { font-size: 12px; color: rgba(245,242,237,0.4); letter-spacing: 0.1em; margin-bottom: 56px; font-family: 'Space Mono', monospace; }
+  .works-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: #222; }
+  .work-card { background: #111; padding: 40px 32px; border: 1px solid #222; transition: border-color 0.3s, background 0.3s; }
+  .work-card:hover { border-color: var(--gold); background: #161616; }
+  .work-card-tag { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-bottom: 16px; }
+  .work-card-name { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; color: var(--white); margin-bottom: 12px; }
+  .work-card-desc { font-size: 12px; line-height: 1.9; color: rgba(245,242,237,0.4); letter-spacing: 0.03em; }
+  .work-card-badge { margin-top: 20px; display: inline-block; padding: 4px 12px; border: 1px solid #333; font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.1em; color: #555; }
+
+  .plans { padding: 120px 56px; border-bottom: 1px solid var(--mid); }
+  .plans-header { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; margin-bottom: 64px; align-items: end; }
+  .plans-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 5vw, 80px); font-weight: 300; line-height: 0.9; }
+  .plans-title em { font-style: italic; color: var(--gold); }
+  .plans-note-text { font-size: 13px; line-height: 2; color: var(--muted); letter-spacing: 0.03em; }
+  .plans-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--mid); border: 1px solid var(--mid); margin-bottom: 24px; }
+  .plan-card { background: var(--bg); padding: 40px 28px; position: relative; transition: background 0.3s; }
+  .plan-card:hover { background: #eee8df; }
+  .plan-card.featured { background: var(--black); }
+  .plan-card.featured:hover { background: #1a1a1a; }
+  .plan-card.featured::before { content: 'POPULAR'; position: absolute; top: 20px; right: 20px; background: var(--gold); color: var(--white); font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.15em; padding: 4px 10px; }
+  .plan-name { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 400; letter-spacing: 0.05em; margin-bottom: 8px; }
+  .plan-card.featured .plan-name { color: var(--white); }
+  .plan-desc { font-size: 11px; color: var(--muted); letter-spacing: 0.03em; margin-bottom: 24px; line-height: 1.8; }
+  .plan-card.featured .plan-desc { color: rgba(245,242,237,0.5); }
+  .plan-divider { width: 40px; height: 1px; background: var(--gold); margin-bottom: 24px; opacity: 0.4; }
+  .plan-price { font-family: 'Cormorant Garamond', serif; font-size: 44px; font-weight: 300; color: var(--gold); line-height: 1; margin-bottom: 4px; }
+  .plan-price-note { font-size: 10px; color: var(--muted); letter-spacing: 0.05em; margin-bottom: 24px; font-family: 'Space Mono', monospace; }
+  .plan-card.featured .plan-price-note { color: rgba(245,242,237,0.3); }
+  .plan-features { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .plan-features li { font-size: 11px; color: var(--muted); letter-spacing: 0.03em; display: flex; gap: 10px; align-items: flex-start; line-height: 1.6; }
+  .plan-card.featured .plan-features li { color: rgba(245,242,237,0.5); }
+  .plan-features li::before { content: '—'; color: var(--gold); font-size: 10px; flex-shrink: 0; }
+  .monthly-note { background: var(--black); padding: 28px 36px; display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+  .monthly-note-left { font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--white); font-weight: 300; white-space: nowrap; }
+  .monthly-note-right { font-size: 12px; color: rgba(245,242,237,0.5); line-height: 1.8; letter-spacing: 0.03em; }
+
+  .flow { padding: 100px 56px; border-bottom: 1px solid var(--mid); }
+  .flow-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 5vw, 80px); font-weight: 300; line-height: 0.9; margin-bottom: 64px; }
+  .flow-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--mid); border: 1px solid var(--mid); }
+  .flow-step { background: var(--bg); padding: 36px 28px; transition: background 0.3s; }
+  .flow-step:hover { background: #eee8df; }
+  .flow-num { font-family: 'Cormorant Garamond', serif; font-size: 40px; color: var(--gold); font-weight: 300; line-height: 1; margin-bottom: 16px; opacity: 0.5; }
+  .flow-step-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; margin-bottom: 10px; color: var(--black); }
+  .flow-step-desc { font-size: 11px; color: var(--muted); line-height: 1.9; letter-spacing: 0.03em; }
+
+  .contact { padding: 120px 56px; background: var(--black); display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .contact-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(56px, 7vw, 100px); font-weight: 300; line-height: 0.9; color: var(--white); margin-bottom: 32px; }
+  .contact-title em { font-style: italic; color: var(--gold); }
+  .contact-sub { font-size: 13px; line-height: 2.2; color: rgba(245,242,237,0.5); margin-bottom: 48px; letter-spacing: 0.05em; }
+  .cta-btn { display: inline-flex; align-items: center; gap: 16px; background: var(--gold); color: var(--white); padding: 20px 48px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; transition: all 0.3s; cursor: none; }
+  .cta-btn:hover { background: var(--white); color: var(--black); transform: translateX(4px); }
+  .cta-btn::after { content: '→'; }
+  .contact-info { display: flex; flex-direction: column; }
+  .contact-row { display: flex; gap: 24px; align-items: center; padding: 24px 0; border-bottom: 1px solid #222; }
+  .contact-row:first-child { border-top: 1px solid #222; }
+  .contact-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--gold); min-width: 80px; }
+  .contact-value { font-size: 13px; color: rgba(245,242,237,0.7); letter-spacing: 0.05em; }
+
+  footer { padding: 28px 56px; background: var(--black); border-top: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
+  .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 16px; letter-spacing: 0.3em; color: rgba(245,242,237,0.2); }
+  .footer-back { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: rgba(245,242,237,0.3); text-decoration: none; text-transform: uppercase; transition: color 0.3s; }
+  .footer-back:hover { color: var(--gold); }
+  .footer-copy { font-family: 'Space Mono', monospace; font-size: 10px; color: rgba(245,242,237,0.2); letter-spacing: 0.1em; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; }
+    .why { padding: 80px 24px; } .why-header { grid-template-columns: 1fr; gap: 32px; } .why-points { grid-template-columns: 1fr 1fr; }
+    .works { padding: 80px 24px; } .works-grid { grid-template-columns: 1fr; }
+    .plans { padding: 80px 24px; } .plans-header { grid-template-columns: 1fr; gap: 24px; } .plans-grid { grid-template-columns: 1fr 1fr; }
+    .flow { padding: 80px 24px; } .flow-steps { grid-template-columns: 1fr 1fr; }
+    .contact { grid-template-columns: 1fr; padding: 80px 24px; gap: 40px; }
+    footer { flex-direction: column; gap: 16px; text-align: center; padding: 28px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="./imaziation.html" class="nav-logo" style="display:flex;flex-direction:column;gap:2px;">imaziation<span style="font-family:'Noto Sans JP',sans-serif;font-size:8px;letter-spacing:0.15em;color:rgba(42,42,42,0.4);font-weight:300;">イマジエーション</span></a>
+  <a href="#contact" class="nav-cta">無料相談する</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-label">// Web Production — imaziation inc.</div>
+    <h1 class="hero-title">あなたの<br>大切な<br><em>場所を、</em><br>世界へ。</h1>
+    <p class="hero-desc">
+      会社も、お店も、ブランドも——<br>
+      <strong>あなたが大切に育ててきたもの</strong>には、それに見合った場所が必要です。<br>
+      imaziationは、その価値をそのまま届けるWEBサイトを作ります。
+    </p>
+  </div>
+  <div class="hero-right">
+    <div style="display:flex;flex-direction:column;gap:32px;padding-bottom:8px;">
+      <div style="border-left:2px solid rgba(184,150,12,0.3);padding-left:24px;">
+        <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.25em;color:var(--gold);margin-bottom:16px;">// WHAT WE MAKE</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text);letter-spacing:0.05em;">LP / ランディングページ</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text);letter-spacing:0.05em;">コーポレートサイト</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text);letter-spacing:0.05em;">ブランドサイト</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text);letter-spacing:0.05em;">ECサイト / 予約・決済対応</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text);letter-spacing:0.05em;">保守・運用サポート</div>
+        </div>
+      </div>
+      <div style="background:var(--black);padding:28px 32px;">
+        <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.2em;color:var(--gold);margin-bottom:12px;">// CONTACT FREE</div>
+        <div style="font-size:13px;color:rgba(245,242,237,0.6);line-height:1.9;letter-spacing:0.03em;">相談・見積は無料です。<br>まずはお気軽にご連絡ください。</div>
+        <a href="#contact" style="display:inline-flex;align-items:center;gap:12px;margin-top:20px;background:var(--gold);color:#fff;padding:14px 28px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.15em;text-decoration:none;transition:all 0.3s;">無料相談する →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="why">
+  <div class="why-header reveal">
+    <div>
+      <div class="section-label">// Why imaziation</div>
+      <h2 class="why-title">なぜ、<br><em>imaziation</em><br>なのか</h2>
+    </div>
+    <div>
+      <p class="why-intro">
+        あなたの会社、お店、ブランド——それはあなたの分身です。<br>
+        大切なものだからこそ、ちゃんと伝えたい。<br>
+        その想いに、真剣に応える。<br><br>
+        imaziationは、あなたが大切にしているものを、<br>
+        丁寧に、誠実に、世界に届けます。<br>
+        全部ひとつのサイトに宿らせる。
+      </p>
+    </div>
+  </div>
+  <div class="why-points reveal">
+    <div class="why-point">
+      <div class="why-num">01</div>
+      <div class="why-point-title">世界観ごと設計する</div>
+      <div class="why-point-desc">色・フォント・言葉・動き、全部あなたのブランドに合わせてゼロから作ります。どこにでもあるサイトにはなりません。</div>
+    </div>
+    <div class="why-point">
+      <div class="why-num">02</div>
+      <div class="why-point-title">映像・SNSと連動できる</div>
+      <div class="why-point-desc">サイトだけで終わらない。映像制作・SNS運用・ブランディングまで一気通貫で対応できるのはimaziationだけです。</div>
+    </div>
+    <div class="why-point">
+      <div class="why-num">03</div>
+      <div class="why-point-title">公開まで全部お任せ</div>
+      <div class="why-point-desc">デザインから実装・公開まで全部対応。難しい作業は一切不要。あなたは確認と承認だけしてください。</div>
+    </div>
+    <div class="why-point">
+      <div class="why-num">04</div>
+      <div class="why-point-title">作った後も続く関係</div>
+      <div class="why-point-desc">月額保守プランで更新・管理を継続サポート。サイトは作って終わりではなく、一緒に育てていくものです。</div>
+    </div>
+  </div>
+</section>
+
+<section class="works">
+  <div class="reveal">
+    <div class="section-label" style="color:rgba(184,150,12,0.8);">// Works</div>
+    <h2 class="works-title">制作実績</h2>
+    <p class="works-sub">Selected Works — Web Production</p>
+  </div>
+  <div class="works-grid reveal">
+    <div class="work-card">
+      <div class="work-card-tag">Corporate Site</div>
+      <div class="work-card-name">imaziation inc.</div>
+      <div class="work-card-desc">株式会社imaziationのコーポレートサイト。映像・音楽・Web・ブランディングの実績を一覧できるポートフォリオ型サイト。このLPと同じクオリティです。</div>
+      <div class="work-card-badge">← このサイトがその実例</div>
+    </div>
+    <div class="work-card">
+      <div class="work-card-tag">Restaurant / Cafe</div>
+      <div class="work-card-name">KOMOLEBI</div>
+      <div class="work-card-desc">大阪・千里丘のカフェ＆ダイニング。スパイスカレー・ドーナツ・コーヒーの世界観を体現したブランドサイト。</div>
+      <div class="work-card-badge">制作中 / Coming Soon</div>
+    </div>
+    <div class="work-card">
+      <div class="work-card-tag">Wellness / 整体</div>
+      <div class="work-card-name">木漏日整体院</div>
+      <div class="work-card-desc">丁寧に向き合う整体院のブランドサイト。予約導線と世界観を両立した、静かで誠実なデザイン。</div>
+      <div class="work-card-badge">制作中 / Coming Soon</div>
+    </div>
+    <div class="work-card">
+      <div class="work-card-tag">Studio / Creative</div>
+      <div class="work-card-name">STUDIO LIMES</div>
+      <div class="work-card-desc">音楽・映像・クリエイティブ制作を手がけるスタジオのブランドサイト。スタジオの世界観と活動を発信する場として設計。</div>
+      <div class="work-card-badge">制作中 / Coming Soon</div>
+    </div>
+  </div>
+</section>
+
+<section class="flow">
+  <div class="reveal">
+    <div class="section-label">// Flow</div>
+    <h2 class="flow-title">制作の流れ</h2>
+  </div>
+  <div class="flow-steps reveal">
+    <div class="flow-step">
+      <div class="flow-num">01</div>
+      <div class="flow-step-title">無料相談</div>
+      <div class="flow-step-desc">メールにてご連絡ください。ご要望・ご予算・イメージをヒアリングします。</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">02</div>
+      <div class="flow-step-title">提案・見積</div>
+      <div class="flow-step-desc">方向性と料金のご提案をします。納得いただけたらご契約。</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">03</div>
+      <div class="flow-step-title">デザイン制作</div>
+      <div class="flow-step-desc">世界観・デザイン・テキストを制作。確認・修正を行います。</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">04</div>
+      <div class="flow-step-title">実装・テスト</div>
+      <div class="flow-step-desc">コーディングとスマホ対応・動作確認を行います。</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">05</div>
+      <div class="flow-step-title">公開</div>
+      <div class="flow-step-desc">ドメイン設定・公開まで全部対応。公開後のサポートも続きます。</div>
+    </div>
+  </div>
+</section>
+
+<section class="plans">
+  <div class="plans-header reveal">
+    <div>
+      <div class="section-label">// Plans</div>
+      <h2 class="plans-title">料金<br><em>プラン</em></h2>
+    </div>
+    <div>
+      <p class="plans-note-text">すべて税別表記です。別途ドメイン・サーバー費用が必要な場合があります。予算や規模に応じてカスタムプランもご相談ください。まずはお気軽にご連絡ください——相談は無料です。</p>
+    </div>
+  </div>
+  <div class="plans-grid reveal">
+    <div class="plan-card">
+      <div class="plan-name">Mini LP</div>
+      <div class="plan-desc">シンプルな1ページLP。まずサイトを持ちたい方に。</div>
+      <div class="plan-divider"></div>
+      <div class="plan-price">¥80,000〜</div>
+      <div class="plan-price-note">お見積りにより変動します</div>
+      <ul class="plan-features">
+        <li>1ページ完結</li>
+        <li>問い合わせフォーム</li>
+        <li>スマホ対応</li>
+        <li>公開まで対応</li>
+      </ul>
+    </div>
+    <div class="plan-card featured">
+      <div class="plan-name">Standard LP</div>
+      <div class="plan-desc">本格デザインの1ページLP。世界観をしっかり伝えたい方に。</div>
+      <div class="plan-divider"></div>
+      <div class="plan-price">¥180,000〜</div>
+      <div class="plan-price-note">お見積りにより変動します</div>
+      <ul class="plan-features">
+        <li>オリジナルデザイン</li>
+        <li>アニメーション演出</li>
+        <li>問い合わせフォーム</li>
+        <li>スマホ対応</li>
+        <li>修正2回まで無料</li>
+      </ul>
+    </div>
+    <div class="plan-card">
+      <div class="plan-name">Corporate</div>
+      <div class="plan-desc">複数ページのコーポレートサイト。会社・店舗の顔を作りたい方に。</div>
+      <div class="plan-divider"></div>
+      <div class="plan-price">¥350,000〜</div>
+      <div class="plan-price-note">お見積りにより変動します</div>
+      <ul class="plan-features">
+        <li>複数ページ構成</li>
+        <li>オリジナルデザイン</li>
+        <li>アニメーション演出</li>
+        <li>スマホ対応</li>
+        <li>修正3回まで無料</li>
+      </ul>
+    </div>
+    <div class="plan-card">
+      <div class="plan-name">Brand Site</div>
+      <div class="plan-desc">世界観込みのトータル制作。ブランドを本気で作りたい方に。</div>
+      <div class="plan-divider"></div>
+      <div class="plan-price">¥600,000〜</div>
+      <div class="plan-price-note">お見積りにより変動します</div>
+      <ul class="plan-features">
+        <li>世界観設計から対応</li>
+        <li>映像・写真撮影も相談可</li>
+        <li>SNS連動設計</li>
+        <li>複数ページ構成</li>
+        <li>修正回数無制限</li>
+        <li>公開後サポート付き</li>
+      </ul>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--mid);border:1px solid var(--mid);" class="reveal">
+    <div style="background:var(--bg);padding:32px 28px;">
+      <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;color:var(--gold);margin-bottom:12px;">LIGHT</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:var(--gold);">¥8,000</div>
+      <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:16px;letter-spacing:0.05em;">/月</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.9;">テキスト・画像の更新<br>セキュリティ確認<br>月1回の軽微な修正</div>
+    </div>
+    <div style="background:#f0ece4;padding:32px 28px;position:relative;">
+      <div style="position:absolute;top:16px;right:16px;background:var(--gold);color:#fff;font-family:'Space Mono',monospace;font-size:8px;padding:3px 8px;letter-spacing:0.1em;">人気</div>
+      <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;color:var(--gold);margin-bottom:12px;">STANDARD</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:var(--gold);">¥15,000</div>
+      <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:16px;letter-spacing:0.05em;">/月</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.9;">ライトの内容すべて<br>月2回までの修正対応<br>メール相談無制限</div>
+    </div>
+    <div style="background:var(--black);padding:32px 28px;">
+      <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;color:var(--gold);margin-bottom:12px;">PREMIUM</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:var(--gold);">¥30,000</div>
+      <div style="font-family:'Space Mono',monospace;font-size:10px;color:rgba(245,242,237,0.3);margin-bottom:16px;letter-spacing:0.05em;">/月</div>
+      <div style="font-size:11px;color:rgba(245,242,237,0.4);line-height:1.9;">スタンダードの内容すべて<br>SNS連動・投稿設計<br>月次レポート・改善提案</div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="contact" id="contact">
+  <div class="reveal">
+    <div class="section-label" style="color:rgba(184,150,12,0.8);">// Contact</div>
+    <h2 class="contact-title">まず、<br><em>話しましょう。</em></h2>
+    <p class="contact-sub">相談は無料です。<br>予算・規模・スケジュール、<br>どんなことでもお気軽にどうぞ。</p>
+    <a href="mailto:imaziation@gmail.com" class="cta-btn">無料相談する</a>
+  </div>
+  <div class="contact-info reveal">
+    <div class="contact-row"><div class="contact-label">Mail</div><div class="contact-value">imaziation@gmail.com</div></div>
+    <div class="contact-row"><div class="contact-label">Instagram</div><div class="contact-value">@imaziation.inc</div></div>
+    <div class="contact-row"><div class="contact-label">Location</div><div class="contact-value">大阪府摂津市千里丘</div></div>
+    <div class="contact-row"><div class="contact-label">Response</div><div class="contact-value">2営業日以内にご返信します</div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">imaziation inc.</div>
+  <a href="./imaziation.html" class="footer-back">← 会社サイトへ戻る</a>
+  <div class="footer-copy">© 2026 株式会社imaziation</div>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx - 5 + 'px';
+    cursor.style.top = my - 5 + 'px';
+  });
+  function animRing() {
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx - 18 + 'px'; ring.style.top = ry - 18 + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>保守・運用プラン | imaziation inc.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Sans+JP:wght@300;400;700&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f2ed;
+    --black: #111;
+    --white: #f5f2ed;
+    --gold: #b8960c;
+    --mid: #ddd8d0;
+    --text: #2a2a2a;
+    --muted: #888;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  .cursor { width: 8px; height: 8px; background: var(--gold); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; }
+  .cursor-ring { width: 32px; height: 32px; border: 1px solid var(--gold); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; opacity: 0.4; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 24px 56px; background: rgba(245,242,237,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--mid); }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; letter-spacing: 0.3em; color: var(--black); text-decoration: none; }
+  .nav-cta { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--white); background: var(--black); padding: 12px 28px; text-decoration: none; text-transform: uppercase; transition: background 0.3s; cursor: none; }
+  .nav-cta:hover { background: var(--gold); }
+
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1.2fr 0.8fr; align-items: end; padding: 120px 56px 80px; gap: 80px; border-bottom: 1px solid var(--mid); }
+  .hero-left { opacity: 0; animation: fadeUp 1s ease 0.3s forwards; }
+  .hero-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.3em; color: var(--gold); text-transform: uppercase; margin-bottom: 32px; }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(60px, 7.5vw, 120px); line-height: 0.9; font-weight: 300; color: var(--black); margin-bottom: 48px; }
+  .hero-title em { font-style: italic; color: var(--gold); }
+  .hero-desc { font-size: 14px; line-height: 2.2; color: var(--muted); max-width: 420px; letter-spacing: 0.03em; border-left: 2px solid var(--gold); padding-left: 24px; }
+  .hero-desc strong { color: var(--text); font-weight: 400; }
+  .hero-right { opacity: 0; animation: fadeUp 1s ease 0.6s forwards; padding-bottom: 8px; }
+
+  .section-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.3em; color: var(--gold); text-transform: uppercase; margin-bottom: 16px; }
+
+  .why { padding: 120px 56px; border-bottom: 1px solid var(--mid); }
+  .why-header { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; align-items: start; margin-bottom: 80px; }
+  .why-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 5vw, 80px); line-height: 0.9; font-weight: 300; }
+  .why-title em { font-style: italic; color: var(--gold); }
+  .why-intro { font-size: 16px; line-height: 2.2; color: var(--text); letter-spacing: 0.03em; padding-top: 16px; }
+  .why-intro strong { font-weight: 400; border-bottom: 1px solid var(--gold); }
+  .why-points { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--mid); border: 1px solid var(--mid); }
+  .why-point { background: var(--bg); padding: 40px 32px; transition: background 0.3s; }
+  .why-point:hover { background: #eee8df; }
+  .why-num { font-family: 'Cormorant Garamond', serif; font-size: 48px; color: var(--gold); font-weight: 300; line-height: 1; margin-bottom: 20px; opacity: 0.6; }
+  .why-point-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; margin-bottom: 12px; color: var(--black); }
+  .why-point-desc { font-size: 12px; line-height: 1.9; color: var(--muted); letter-spacing: 0.03em; }
+
+  .plans { padding: 120px 56px; border-bottom: 1px solid var(--mid); }
+  .plans-header { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; margin-bottom: 64px; align-items: end; }
+  .plans-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 5vw, 80px); font-weight: 300; line-height: 0.9; }
+  .plans-title em { font-style: italic; color: var(--gold); }
+  .plans-note-text { font-size: 13px; line-height: 2; color: var(--muted); letter-spacing: 0.03em; }
+  .plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--mid); border: 1px solid var(--mid); margin-bottom: 32px; }
+  .plan-card { background: var(--bg); padding: 48px 36px; position: relative; transition: background 0.3s; }
+  .plan-card:hover { background: #eee8df; }
+  .plan-card.featured { background: var(--black); }
+  .plan-card.featured:hover { background: #1a1a1a; }
+  .plan-card.featured::before { content: '人気'; position: absolute; top: 20px; right: 20px; background: var(--gold); color: var(--white); font-family: 'Noto Sans JP', sans-serif; font-size: 10px; letter-spacing: 0.1em; padding: 4px 12px; }
+  .plan-name { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 400; letter-spacing: 0.05em; margin-bottom: 8px; }
+  .plan-name-ja { font-size: 11px; color: var(--muted); letter-spacing: 0.15em; margin-bottom: 24px; }
+  .plan-card.featured .plan-name { color: var(--white); }
+  .plan-card.featured .plan-name-ja { color: rgba(245,242,237,0.4); }
+  .plan-divider { width: 40px; height: 1px; background: var(--gold); margin-bottom: 28px; opacity: 0.4; }
+  .plan-price { font-family: 'Cormorant Garamond', serif; font-size: 56px; font-weight: 300; color: var(--gold); line-height: 1; margin-bottom: 4px; }
+  .plan-price-note { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 32px; font-family: 'Space Mono', monospace; }
+  .plan-card.featured .plan-price-note { color: rgba(245,242,237,0.3); }
+  .plan-features { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .plan-features li { font-size: 12px; color: var(--muted); letter-spacing: 0.03em; display: flex; gap: 10px; align-items: flex-start; line-height: 1.6; }
+  .plan-card.featured .plan-features li { color: rgba(245,242,237,0.55); }
+  .plan-features li::before { content: '—'; color: var(--gold); font-size: 10px; flex-shrink: 0; }
+
+  .compare { padding: 0 56px 120px; border-bottom: 1px solid var(--mid); }
+  .compare-title { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; margin-bottom: 32px; color: var(--black); }
+  .compare-table { width: 100%; border-collapse: collapse; }
+  .compare-table th, .compare-table td { padding: 18px 24px; text-align: left; border-bottom: 1px solid var(--mid); font-size: 12px; letter-spacing: 0.03em; }
+  .compare-table th { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--gold); font-weight: 400; background: var(--black); padding: 20px 24px; }
+  .compare-table td:first-child { color: var(--text); font-size: 13px; }
+  .compare-table td:not(:first-child) { color: var(--muted); text-align: center; }
+  .compare-table tr:hover td { background: #eee8df; }
+  .check { color: var(--gold); font-size: 16px; }
+  .dash { color: var(--mid); }
+
+  .flow { padding: 100px 56px; border-bottom: 1px solid var(--mid); }
+  .flow-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 5vw, 80px); font-weight: 300; line-height: 0.9; margin-bottom: 64px; }
+  .flow-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--mid); border: 1px solid var(--mid); }
+  .flow-step { background: var(--bg); padding: 36px 28px; transition: background 0.3s; }
+  .flow-step:hover { background: #eee8df; }
+  .flow-num { font-family: 'Cormorant Garamond', serif; font-size: 40px; color: var(--gold); font-weight: 300; line-height: 1; margin-bottom: 16px; opacity: 0.5; }
+  .flow-step-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; margin-bottom: 10px; color: var(--black); }
+  .flow-step-desc { font-size: 11px; color: var(--muted); line-height: 1.9; letter-spacing: 0.03em; }
+
+  .faq { padding: 100px 56px; border-bottom: 1px solid var(--mid); background: var(--black); }
+  .faq-header { margin-bottom: 56px; }
+  .faq-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 5vw, 80px); font-weight: 300; color: var(--white); line-height: 0.9; }
+  .faq-title em { font-style: italic; color: var(--gold); }
+  .faq-list { display: flex; flex-direction: column; gap: 1px; }
+  .faq-item { background: #1a1a1a; padding: 36px 40px; }
+  .faq-q { font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--white); margin-bottom: 16px; display: flex; gap: 20px; align-items: flex-start; }
+  .faq-q::before { content: 'Q.'; color: var(--gold); font-style: italic; flex-shrink: 0; }
+  .faq-a { font-size: 13px; color: rgba(245,242,237,0.5); line-height: 2; letter-spacing: 0.03em; padding-left: 32px; }
+
+  .contact { padding: 120px 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .contact-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(56px, 7vw, 100px); font-weight: 300; line-height: 0.9; color: var(--black); margin-bottom: 32px; }
+  .contact-title em { font-style: italic; color: var(--gold); }
+  .contact-sub { font-size: 13px; line-height: 2.2; color: var(--muted); margin-bottom: 48px; letter-spacing: 0.05em; }
+  .cta-btn { display: inline-flex; align-items: center; gap: 16px; background: var(--gold); color: var(--white); padding: 20px 48px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; transition: all 0.3s; cursor: none; }
+  .cta-btn:hover { background: var(--black); color: var(--white); transform: translateX(4px); }
+  .cta-btn::after { content: '→'; }
+  .contact-info { display: flex; flex-direction: column; }
+  .contact-row { display: flex; gap: 24px; align-items: center; padding: 24px 0; border-bottom: 1px solid var(--mid); }
+  .contact-row:first-child { border-top: 1px solid var(--mid); }
+  .contact-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--gold); min-width: 80px; }
+  .contact-value { font-size: 13px; color: var(--muted); letter-spacing: 0.05em; }
+
+  footer { padding: 28px 56px; background: var(--black); border-top: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
+  .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 16px; letter-spacing: 0.3em; color: rgba(245,242,237,0.2); }
+  .footer-back { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: rgba(245,242,237,0.3); text-decoration: none; text-transform: uppercase; transition: color 0.3s; }
+  .footer-back:hover { color: var(--gold); }
+  .footer-copy { font-family: 'Space Mono', monospace; font-size: 10px; color: rgba(245,242,237,0.2); letter-spacing: 0.1em; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; }
+    .why { padding: 80px 24px; } .why-header { grid-template-columns: 1fr; gap: 32px; } .why-points { grid-template-columns: 1fr 1fr; }
+    .plans { padding: 80px 24px; } .plans-header { grid-template-columns: 1fr; gap: 24px; } .plans-grid { grid-template-columns: 1fr; }
+    .compare { padding: 0 24px 80px; }
+    .flow { padding: 80px 24px; } .flow-steps { grid-template-columns: 1fr 1fr; }
+    .faq { padding: 80px 24px; }
+    .contact { grid-template-columns: 1fr; padding: 80px 24px; gap: 40px; }
+    footer { flex-direction: column; gap: 16px; text-align: center; padding: 28px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="./imaziation.html" class="nav-logo" style="display:flex;flex-direction:column;gap:2px;">imaziation<span style="font-family:'Noto Sans JP',sans-serif;font-size:8px;letter-spacing:0.15em;color:rgba(42,42,42,0.4);font-weight:300;">イマジエーション</span></a>
+  <a href="#contact" class="nav-cta">無料相談する</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-label">// Maintenance & Support — imaziation inc.</div>
+    <h1 class="hero-title">作った後も、<br><em>ずっと</em><br>一緒に。</h1>
+    <p class="hero-desc">
+      サイトは公開してからが本番です。<br>
+      <strong>更新・管理・改善</strong>——面倒なことは全部お任せください。<br>
+      imaziationの保守プランで、あなたのサイトを育て続けます。
+    </p>
+  </div>
+  <div class="hero-right">
+    <div style="display:flex;flex-direction:column;gap:32px;">
+      <div style="border-left:2px solid rgba(184,150,12,0.3);padding-left:24px;">
+        <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.25em;color:var(--gold);margin-bottom:16px;">// WHAT WE COVER</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text);letter-spacing:0.05em;">テキスト・画像の更新</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text);letter-spacing:0.05em;">セキュリティ管理</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text);letter-spacing:0.05em;">不具合・障害対応</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text);letter-spacing:0.05em;">SNS連動・投稿設計</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text);letter-spacing:0.05em;">月次レポート・改善提案</div>
+        </div>
+      </div>
+      <div style="background:var(--black);padding:28px 32px;">
+        <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.2em;color:var(--gold);margin-bottom:12px;">// MONTHLY FROM</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:64px;font-weight:300;color:var(--white);line-height:1;">¥8,000</div>
+        <div style="font-family:'Space Mono',monospace;font-size:10px;color:rgba(245,242,237,0.3);margin-bottom:16px;letter-spacing:0.1em;">/月（税別）〜</div>
+        <div style="font-size:12px;color:rgba(245,242,237,0.5);line-height:1.9;letter-spacing:0.03em;">契約縛りなし。1ヶ月単位で柔軟に対応。<br>相談・見積は無料です。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="why">
+  <div class="why-header reveal">
+    <div>
+      <div class="section-label">// Why Maintenance</div>
+      <h2 class="why-title">なぜ、<br>保守が<br><em>必要か</em></h2>
+    </div>
+    <div>
+      <p class="why-intro">
+        サイトは「公開して終わり」ではありません。<br>
+        放置すると、<strong>情報は古くなり</strong>、セキュリティは脆くなり、<br>
+        せっかく作った信頼が少しずつ失われていきます。<br><br>
+        imaziationの保守プランは、あなたのサイトを<br>
+        常に最良の状態に保ち続けるためのパートナーシップです。
+      </p>
+    </div>
+  </div>
+  <div class="why-points reveal">
+    <div class="why-point">
+      <div class="why-num">01</div>
+      <div class="why-point-title">情報を常に新鮮に</div>
+      <div class="why-point-desc">古い情報が載ったままのサイトは信頼を損ないます。テキスト・画像・お知らせを定期的に更新し、訪問者に正確な情報を届けます。</div>
+    </div>
+    <div class="why-point">
+      <div class="why-num">02</div>
+      <div class="why-point-title">セキュリティを守る</div>
+      <div class="why-point-desc">放置されたサイトはハッキングやウイルス感染のリスクが高まります。定期的な確認と対策で、あなたのサイトと訪問者を守ります。</div>
+    </div>
+    <div class="why-point">
+      <div class="why-num">03</div>
+      <div class="why-point-title">すぐに相談できる</div>
+      <div class="why-point-desc">「ここを直したい」「新しい情報を追加したい」——そのたびに業者を探す手間は不要。作ったimaziationがそのまま対応します。</div>
+    </div>
+    <div class="why-point">
+      <div class="why-num">04</div>
+      <div class="why-point-title">改善し続けるサイトへ</div>
+      <div class="why-point-desc">データや反応を見ながら、より伝わるサイトへアップデート。公開がゴールではなく、一緒に育てていく関係を大切にします。</div>
+    </div>
+  </div>
+</section>
+
+<section class="plans">
+  <div class="plans-header reveal">
+    <div>
+      <div class="section-label">// Plans</div>
+      <h2 class="plans-title">保守<br><em>プラン</em></h2>
+    </div>
+    <div>
+      <p class="plans-note-text">すべて税別表記です。月単位でのご契約となります。契約期間の縛りはありません。ご予算やサイトの規模に応じてカスタムプランもご相談ください。まずはお気軽にご連絡ください——相談は無料です。</p>
+    </div>
+  </div>
+  <div class="plans-grid reveal">
+    <div class="plan-card">
+      <div class="plan-name">Light</div>
+      <div class="plan-name-ja">ライト — 最小限の安心</div>
+      <div class="plan-divider"></div>
+      <div class="plan-price">¥8,000</div>
+      <div class="plan-price-note">/月（税別）</div>
+      <ul class="plan-features">
+        <li>テキスト・画像の更新（月1回）</li>
+        <li>セキュリティ状態の確認</li>
+        <li>軽微な表示崩れの修正</li>
+        <li>メール問い合わせ対応</li>
+      </ul>
+    </div>
+    <div class="plan-card featured">
+      <div class="plan-name">Standard</div>
+      <div class="plan-name-ja">スタンダード — バランス重視</div>
+      <div class="plan-divider"></div>
+      <div class="plan-price">¥15,000</div>
+      <div class="plan-price-note">/月（税別）</div>
+      <ul class="plan-features">
+        <li>ライトの内容すべて</li>
+        <li>月2回までのコンテンツ更新</li>
+        <li>メール相談無制限</li>
+        <li>不具合・障害の優先対応</li>
+        <li>軽微なデザイン調整</li>
+      </ul>
+    </div>
+    <div class="plan-card">
+      <div class="plan-name">Premium</div>
+      <div class="plan-name-ja">プレミアム — 本気で育てる</div>
+      <div class="plan-divider"></div>
+      <div class="plan-price">¥30,000</div>
+      <div class="plan-price-note">/月（税別）</div>
+      <ul class="plan-features">
+        <li>スタンダードの内容すべて</li>
+        <li>コンテンツ更新回数無制限</li>
+        <li>SNS連動・投稿設計のサポート</li>
+        <li>月次レポートと改善提案</li>
+        <li>新規ページ追加（年1回まで）</li>
+        <li>最優先対応</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="compare reveal">
+    <div class="compare-title" style="padding-top:48px;">プラン比較</div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>サービス内容</th>
+          <th>Light</th>
+          <th>Standard</th>
+          <th>Premium</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>テキスト・画像の更新</td><td class="check">月1回</td><td class="check">月2回</td><td class="check">無制限</td></tr>
+        <tr><td>セキュリティ確認</td><td class="check">◯</td><td class="check">◯</td><td class="check">◯</td></tr>
+        <tr><td>表示崩れ・軽微な修正</td><td class="check">◯</td><td class="check">◯</td><td class="check">◯</td></tr>
+        <tr><td>メール相談</td><td>月2回まで</td><td class="check">無制限</td><td class="check">無制限</td></tr>
+        <tr><td>不具合・障害対応</td><td>通常対応</td><td class="check">優先対応</td><td class="check">最優先対応</td></tr>
+        <tr><td>軽微なデザイン調整</td><td class="dash">—</td><td class="check">◯</td><td class="check">◯</td></tr>
+        <tr><td>SNS連動・投稿設計</td><td class="dash">—</td><td class="dash">—</td><td class="check">◯</td></tr>
+        <tr><td>月次レポート・改善提案</td><td class="dash">—</td><td class="dash">—</td><td class="check">◯</td></tr>
+        <tr><td>新規ページ追加</td><td class="dash">—</td><td class="dash">—</td><td class="check">年1回まで</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="flow">
+  <div class="reveal">
+    <div class="section-label">// How to Start</div>
+    <h2 class="flow-title">始め方</h2>
+  </div>
+  <div class="flow-steps reveal">
+    <div class="flow-step">
+      <div class="flow-num">01</div>
+      <div class="flow-step-title">無料相談</div>
+      <div class="flow-step-desc">メールまたはInstagramよりご連絡ください。現在のサイト状況とご要望をヒアリングします。</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">02</div>
+      <div class="flow-step-title">プラン提案</div>
+      <div class="flow-step-desc">サイトの規模・更新頻度・予算に合わせて最適なプランをご提案します。カスタムもご相談ください。</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">03</div>
+      <div class="flow-step-title">ご契約・引き継ぎ</div>
+      <div class="flow-step-desc">契約後、サイトの管理情報をお預かりします。他社制作のサイトも対応可能です。</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">04</div>
+      <div class="flow-step-title">保守スタート</div>
+      <div class="flow-step-desc">翌月より保守開始。更新依頼はメールで送るだけ。面倒な作業はすべてこちらで対応します。</div>
+    </div>
+  </div>
+</section>
+
+<section class="faq">
+  <div class="faq-header reveal">
+    <div class="section-label" style="color:rgba(184,150,12,0.8);">// FAQ</div>
+    <h2 class="faq-title">よくある<br><em>質問</em></h2>
+  </div>
+  <div class="faq-list reveal">
+    <div class="faq-item">
+      <div class="faq-q">imaziation以外で作ったサイトでも対応できますか？</div>
+      <div class="faq-a">はい、対応可能です。まずはサイトの構成・使用技術をお知らせください。内容を確認した上でご提案します。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">契約期間の縛りはありますか？</div>
+      <div class="faq-a">ありません。月単位でのご契約となりますので、合わなければいつでも解約できます。解約は翌月末日付けで承ります。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">更新依頼はどうやってすればいいですか？</div>
+      <div class="faq-a">メールにて「どこを・どう変えたいか」をお送りいただくだけです。素材（画像・テキスト）を添付していただければ、こちらで反映します。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">プランの途中でアップグレードはできますか？</div>
+      <div class="faq-a">はい、いつでも変更可能です。翌月から新プランに切り替わります。ご要望に合わせて柔軟に対応します。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">障害が発生した場合、どのくらいで対応してもらえますか？</div>
+      <div class="faq-a">Lightプランは通常1〜2営業日以内、Standardは当日〜翌営業日、Premiumは最優先で当日対応を目指します。緊急の場合はInstagramのDMにてご連絡ください。</div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="reveal">
+    <div class="section-label">// Contact</div>
+    <h2 class="contact-title">まず、<br><em>話しましょう。</em></h2>
+    <p class="contact-sub">相談・見積は無料です。<br>「どのプランが合うか分からない」でも大丈夫。<br>一緒に考えます。</p>
+    <a href="mailto:imaziation@gmail.com" class="cta-btn">無料相談する</a>
+  </div>
+  <div class="contact-info reveal">
+    <div class="contact-row"><div class="contact-label">Mail</div><div class="contact-value">imaziation@gmail.com</div></div>
+    <div class="contact-row"><div class="contact-label">Instagram</div><div class="contact-value">@imaziation.inc</div></div>
+    <div class="contact-row"><div class="contact-label">Location</div><div class="contact-value">大阪府摂津市千里丘</div></div>
+    <div class="contact-row"><div class="contact-label">Response</div><div class="contact-value">2営業日以内にご返信します</div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">imaziation inc.</div>
+  <a href="./imaziation_web_lp.html" class="footer-back">← Web制作LPへ戻る</a>
+  <div class="footer-copy">© 2026 株式会社imaziation</div>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx - 5 + 'px';
+    cursor.style.top = my - 5 + 'px';
+  });
+  function animRing() {
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx - 18 + 'px'; ring.style.top = ry - 18 + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

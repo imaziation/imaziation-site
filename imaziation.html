@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>imaziation inc. — Creative Production</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@300;400;700&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f0ede8;
+    --accent: #c8f542;
+    --gray: #1a1a1a;
+    --mid: #2a2a2a;
+    --text-muted: #666;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CURSOR */
+  .cursor {
+    width: 10px; height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: all 0.1s ease;
+    mix-blend-mode: difference;
+    opacity: 0.5;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 48px;
+    mix-blend-mode: difference;
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.2em;
+    color: var(--white);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--white);
+    text-decoration: none;
+    text-transform: uppercase;
+    opacity: 0.6;
+    transition: opacity 0.3s;
+  }
+
+  .nav-links a:hover { opacity: 1; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 70% 30%, rgba(200,245,66,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(200,245,66,0.03) 0%, transparent 50%);
+  }
+
+  .hero-noise {
+    position: absolute;
+    inset: 0;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 200px;
+  }
+
+  .hero-counter {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.3s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(80px, 14vw, 220px);
+    line-height: 0.88;
+    letter-spacing: -0.01em;
+    position: relative;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.5s forwards;
+  }
+
+  .hero-title .accent { color: var(--accent); }
+
+  .hero-title .outline {
+    -webkit-text-stroke: 1px var(--white);
+    color: transparent;
+  }
+
+  .hero-sub {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.9s forwards;
+  }
+
+  .hero-tagline {
+    font-size: 13px;
+    line-height: 1.8;
+    letter-spacing: 0.05em;
+    color: rgba(240,237,232,0.6);
+    max-width: 320px;
+  }
+
+  .hero-tagline strong {
+    color: var(--white);
+    font-weight: 400;
+  }
+
+  .hero-scroll {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .hero-scroll::before {
+    content: '';
+    width: 60px;
+    height: 1px;
+    background: var(--text-muted);
+    animation: lineGrow 1.5s ease 1.5s both;
+  }
+
+  .hero-line {
+    position: absolute;
+    right: 48px;
+    top: 50%;
+    width: 1px;
+    height: 40%;
+    background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+    opacity: 0.3;
+  }
+
+  /* TICKER */
+  .ticker {
+    border-top: 1px solid var(--mid);
+    border-bottom: 1px solid var(--mid);
+    padding: 16px 0;
+    overflow: hidden;
+    background: var(--gray);
+  }
+
+  .ticker-inner {
+    display: flex;
+    gap: 64px;
+    white-space: nowrap;
+    animation: ticker 20s linear infinite;
+  }
+
+  .ticker-item {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .ticker-item span { color: var(--accent); margin-right: 8px; }
+
+  /* ABOUT */
+  .about {
+    padding: 120px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .about-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 6vw, 96px);
+    line-height: 0.9;
+    margin-bottom: 40px;
+  }
+
+  .about-text {
+    font-size: 14px;
+    line-height: 2;
+    color: rgba(240,237,232,0.7);
+    margin-bottom: 20px;
+  }
+
+  .about-text strong { color: var(--white); font-weight: 400; }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 48px;
+  }
+
+  .stat-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .about-visual {
+    position: relative;
+    height: 500px;
+  }
+
+  .about-box {
+    position: absolute;
+    border: 1px solid var(--mid);
+  }
+
+  .about-box:nth-child(1) {
+    inset: 0;
+    background: var(--gray);
+  }
+
+  .about-box:nth-child(2) {
+    top: -20px; right: -20px;
+    width: 60%; height: 60%;
+    border-color: var(--accent);
+    opacity: 0.2;
+  }
+
+  .about-box:nth-child(3) {
+    bottom: -20px; left: -20px;
+    width: 40%; height: 40%;
+    border-color: var(--white);
+    opacity: 0.1;
+  }
+
+  .about-box-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    padding: 40px;
+  }
+
+  .service-pill {
+    background: var(--mid);
+    border: 1px solid rgba(200,245,66,0.2);
+    padding: 10px 24px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+    width: 100%;
+    text-align: center;
+    transition: all 0.3s;
+  }
+
+  .service-pill:hover {
+    background: rgba(200,245,66,0.1);
+    border-color: var(--accent);
+  }
+
+  /* WORKS */
+  .works {
+    padding: 120px 48px;
+    border-top: 1px solid var(--mid);
+  }
+
+  .works-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 64px;
+  }
+
+  .works-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 6vw, 96px);
+    line-height: 0.9;
+  }
+
+  .works-count {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.2em;
+  }
+
+  .works-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .work-item {
+    position: relative;
+    aspect-ratio: 4/3;
+    background: var(--gray);
+    overflow: hidden;
+    cursor: none;
+    group: true;
+  }
+
+  .work-item:first-child {
+    grid-column: span 2;
+    aspect-ratio: unset;
+  }
+
+  .work-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 32px;
+  }
+
+  .work-item:hover .work-overlay { opacity: 1; }
+
+  .work-category {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .work-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.05em;
+  }
+
+  .work-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(24px, 3vw, 48px);
+    color: rgba(240,237,232,0.05);
+    letter-spacing: 0.1em;
+    background:
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 20px,
+        rgba(255,255,255,0.01) 20px,
+        rgba(255,255,255,0.01) 21px
+      );
+  }
+
+  /* CATEGORIES */
+  .categories {
+    padding: 80px 48px;
+    background: var(--gray);
+  }
+
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    margin-top: 48px;
+    border: 1px solid var(--mid);
+  }
+
+  .cat-item {
+    padding: 40px 32px;
+    border-right: 1px solid var(--mid);
+    transition: background 0.3s;
+  }
+
+  .cat-item:last-child { border-right: none; }
+  .cat-item:hover { background: rgba(200,245,66,0.03); }
+
+  .cat-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: 24px;
+    opacity: 0.6;
+  }
+
+  .cat-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+    line-height: 1;
+  }
+
+  .cat-desc {
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--text-muted);
+  }
+
+  /* CLIENTS */
+  .clients {
+    padding: 100px 48px;
+    border-top: 1px solid var(--mid);
+  }
+
+  .clients-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 5vw, 80px);
+    margin-bottom: 56px;
+  }
+
+  .clients-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    border-top: 1px solid var(--mid);
+  }
+
+  .client-item {
+    padding: 24px 32px;
+    border-right: 1px solid var(--mid);
+    border-bottom: 1px solid var(--mid);
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    color: rgba(240,237,232,0.5);
+    transition: color 0.3s;
+    min-width: 200px;
+  }
+
+  .client-item:hover { color: var(--white); }
+
+  /* CONTACT */
+  .contact {
+    padding: 120px 48px;
+    background: var(--gray);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .contact-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(60px, 8vw, 130px);
+    line-height: 0.88;
+    margin-bottom: 32px;
+  }
+
+  .contact-title .accent { color: var(--accent); }
+
+  .contact-sub {
+    font-size: 13px;
+    line-height: 2;
+    color: rgba(240,237,232,0.6);
+    margin-bottom: 40px;
+  }
+
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .contact-row {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--mid);
+  }
+
+  .contact-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    min-width: 80px;
+  }
+
+  .contact-value {
+    font-size: 13px;
+    color: var(--white);
+    letter-spacing: 0.05em;
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--accent);
+    color: var(--black);
+    padding: 18px 40px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s;
+    cursor: none;
+  }
+
+  .cta-btn:hover {
+    background: var(--white);
+    transform: translateX(4px);
+  }
+
+  .cta-btn::after {
+    content: '→';
+    transition: transform 0.3s;
+  }
+
+  .cta-btn:hover::after { transform: translateX(4px); }
+
+  /* FOOTER */
+  footer {
+    padding: 40px 48px;
+    border-top: 1px solid var(--mid);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.2em;
+    color: rgba(240,237,232,0.3);
+  }
+
+  .footer-copy {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+  }
+
+  .footer-sns {
+    display: flex;
+    gap: 24px;
+  }
+
+  .footer-sns a {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .footer-sns a:hover { color: var(--accent); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @keyframes lineGrow {
+    from { transform: scaleX(0); transform-origin: left; }
+    to { transform: scaleX(1); }
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 0 24px 60px; }
+    .about { grid-template-columns: 1fr; padding: 80px 24px; gap: 40px; }
+    .about-visual { height: 300px; }
+    .works { padding: 80px 24px; }
+    .works-grid { grid-template-columns: 1fr; }
+    .work-item:first-child { grid-column: span 1; aspect-ratio: 4/3; }
+    .cat-grid { grid-template-columns: 1fr 1fr; }
+    .cat-item { border-right: none; border-bottom: 1px solid var(--mid); }
+    .clients { padding: 60px 24px; }
+    .contact { grid-template-columns: 1fr; padding: 80px 24px; gap: 40px; }
+    footer { flex-direction: column; gap: 24px; text-align: center; padding: 32px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo" style="display:flex;flex-direction:column;gap:2px;">IMAZIATION<span style="font-family:'Noto Sans JP',sans-serif;font-size:8px;letter-spacing:0.15em;color:rgba(240,237,232,0.4);font-weight:300;">イマジエーション</span></a>
+  <ul class="nav-links">
+    <li><a href="#works">Works</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-noise"></div>
+  <div class="hero-line"></div>
+
+  <div class="hero-counter">株式会社イマジエーション — Osaka, Japan — Est. 2019</div>
+
+  <h1 class="hero-title">
+    YOUR<br>
+    <span class="outline">VALUE,</span><br>
+    <span class="accent">TOLD.</span>
+  </h1>
+
+  <div class="hero-sub">
+    <p class="hero-tagline">
+      <strong>映像・音楽・Web・SNS。</strong><br>
+      あなたの事業が持つ価値を、<br>
+      世界に伝わる言葉とビジュアルに変える。<br>
+      ワンストップクリエイティブ制作会社。
+    </p>
+    <div class="hero-scroll">Scroll to explore</div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item"><span>✦</span> VIDEO PRODUCTION</span>
+    <span class="ticker-item"><span>✦</span> MUSIC VIDEO</span>
+    <span class="ticker-item"><span>✦</span> WEB DESIGN</span>
+    <span class="ticker-item"><span>✦</span> SNS MANAGEMENT</span>
+    <span class="ticker-item"><span>✦</span> BRAND PROMOTION</span>
+    <span class="ticker-item"><span>✦</span> SOUND PRODUCTION</span>
+    <span class="ticker-item"><span>✦</span> EVENT FILM</span>
+    <span class="ticker-item"><span>✦</span> CM PRODUCTION</span>
+    <span class="ticker-item"><span>✦</span> VIDEO PRODUCTION</span>
+    <span class="ticker-item"><span>✦</span> MUSIC VIDEO</span>
+    <span class="ticker-item"><span>✦</span> WEB DESIGN</span>
+    <span class="ticker-item"><span>✦</span> SNS MANAGEMENT</span>
+    <span class="ticker-item"><span>✦</span> BRAND PROMOTION</span>
+    <span class="ticker-item"><span>✦</span> SOUND PRODUCTION</span>
+    <span class="ticker-item"><span>✦</span> EVENT FILM</span>
+    <span class="ticker-item"><span>✦</span> CM PRODUCTION</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="reveal">
+    <div class="section-label">// 001 — About</div>
+    <h2 class="about-title">WHAT<br>WE DO</h2>
+    <p class="about-text">
+      <strong>imaziation</strong> は、大阪を拠点とするクリエイティブ・プロデュース会社です。
+    </p>
+    <p class="about-text">
+      映像・音楽・Web・デザイン・ブランディング・空間プロデュース——<strong>あなたの価値を届けるために必要なことは、全部できる。</strong>
+    </p>
+    <p class="about-text">
+      BEAMS、手取川150周年、DMC世界チャンピオン、日本ふるさとCM大賞受賞など、<strong>全国規模のブランドから地域文化の記録まで</strong>、幅広い実績を持ちます。
+    </p>
+
+    <div style="margin-top:40px;padding:36px;border-left:2px solid var(--accent);background:rgba(200,245,66,0.03);">
+      <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.25em;color:var(--accent);margin-bottom:20px;">— OUR PHILOSOPHY</div>
+      <p style="font-size:15px;line-height:2.2;color:var(--white);letter-spacing:0.05em;">
+        あなたの人生に、プロポーズする。
+      </p>
+      <p style="font-size:13px;line-height:2.2;color:rgba(240,237,232,0.7);margin-top:12px;letter-spacing:0.05em;">
+        毎日の積み重ねが、あなたをつくる。<br>
+        だから私たちは、関わるすべての人へ——<br>
+        真剣に、熱く、誠実に、心を込めて届ける。<br><br>
+        それが私たちの、唯一の約束だ。
+      </p>
+      <p style="font-family:'Space Mono',monospace;font-size:11px;color:rgba(200,245,66,0.5);margin-top:20px;letter-spacing:0.15em;font-style:italic;">
+        Lifestyle Propose — to everyone we touch.
+      </p>
+    </div>
+    <div class="about-stats">
+      <div>
+        <div class="stat-number">50+</div>
+        <div class="stat-label">制作実績</div>
+      </div>
+      <div>
+        <div class="stat-number">10+</div>
+        <div class="stat-label">年のキャリア</div>
+      </div>
+      <div>
+        <div class="stat-number">4</div>
+        <div class="stat-label">クリエイティブ領域</div>
+      </div>
+      <div>
+        <div class="stat-number">1</div>
+        <div class="stat-label">受賞歴（ふるさとCM大賞）</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="about-visual reveal">
+    <div class="about-box"></div>
+    <div class="about-box"></div>
+    <div class="about-box"></div>
+  </div>
+</section>
+
+<!-- WORKS -->
+<section class="works" id="works">
+  <div class="works-header reveal">
+    <div>
+      <div class="section-label">// 002 — Works</div>
+      <h2 class="works-title">SELECTED<br>WORKS</h2>
+    </div>
+    <div class="works-count">50+ Projects</div>
+  </div>
+
+  <div class="works-grid reveal">
+
+    <div class="work-item" style="cursor:pointer;" onclick="window.open('https://youtu.be/HK72NRBuPYw','_blank')">
+      <img src="https://img.youtube.com/vi/HK72NRBuPYw/maxresdefault.jpg" alt="株式会社ハイロープ" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+      <div class="work-overlay">
+        <div class="work-category">Total Produce / Video / Sound / Uniform Design</div>
+        <div class="work-name">株式会社ハイロープ</div>
+      </div>
+    </div>
+
+    <div class="work-item" style="cursor:pointer;" onclick="window.open('https://www.instagram.com/p/CU40AP5FRwJ/','_blank')">
+      <img src="https://img.youtube.com/vi/8TXiD0LQXE8/maxresdefault.jpg" alt="KOMOLEBI × 梅田サイファー" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+      <div class="work-overlay">
+        <div class="work-category">Total Produce / Music / Video / Apparel / Media</div>
+        <div class="work-name">KOMOLEBI × 梅田サイファー</div>
+      </div>
+    </div>
+
+    <div class="work-item" style="cursor:pointer;" onclick="window.open('https://youtu.be/Tl0D-qJkl1g','_blank')">
+      <img src="https://img.youtube.com/vi/Tl0D-qJkl1g/maxresdefault.jpg" alt="DJ IZOH" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+      <div class="work-overlay">
+        <div class="work-category">Sound Producer — DMC WORLD CHAMPION 2012</div>
+        <div class="work-name">DJ IZOH — Genre Bender</div>
+      </div>
+    </div>
+
+    <div class="work-item" style="cursor:pointer;" onclick="window.open('https://youtu.be/Zb-MFye2RH4','_blank')">
+      <img src="https://img.youtube.com/vi/Zb-MFye2RH4/maxresdefault.jpg" alt="DJ SPI-K" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+      <div class="work-overlay">
+        <div class="work-category">Director / Sound Producer / Total Produce</div>
+        <div class="work-name">DJ SPI-K — NEVER LOOK BACK</div>
+      </div>
+    </div>
+
+    <div class="work-item" style="cursor:pointer;" onclick="window.open('https://youtu.be/1Gg8hKyNDVw','_blank')">
+      <img src="https://img.youtube.com/vi/1Gg8hKyNDVw/maxresdefault.jpg" alt="NOTONOWILD" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+      <div class="work-overlay">
+        <div class="work-category">Sound Producer</div>
+        <div class="work-name">NOTONOWILD — にわか祭</div>
+      </div>
+    </div>
+
+    <div class="work-item" style="cursor:pointer;" onclick="window.open('https://youtu.be/YZJ0HqflWn8','_blank')">
+      <img src="https://img.youtube.com/vi/YZJ0HqflWn8/maxresdefault.jpg" alt="BEAMS × ふくべ鍛治" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+      <div class="work-overlay">
+        <div class="work-category">Sound Producer</div>
+        <div class="work-name">BEAMS × ふくべ鍛治</div>
+      </div>
+    </div>
+
+    <div class="work-item" style="cursor:pointer;" onclick="window.open('https://youtu.be/pLjNlkY336Q','_blank')">
+      <img src="https://img.youtube.com/vi/pLjNlkY336Q/maxresdefault.jpg" alt="手取川150周年" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+      <div class="work-overlay">
+        <div class="work-category">Sound Producer</div>
+        <div class="work-name">手取川 150周年</div>
+      </div>
+    </div>
+
+    <div class="work-item" style="cursor:pointer;" onclick="window.open('https://youtu.be/4S1mP4Ldwmc','_blank')">
+      <img src="https://img.youtube.com/vi/4S1mP4Ldwmc/maxresdefault.jpg" alt="日本ふるさとCM大賞" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+      <div class="work-overlay">
+        <div class="work-category">Sound Producer — 特別賞受賞</div>
+        <div class="work-name">日本ふるさとCM大賞 / 珠洲市</div>
+      </div>
+    </div>
+
+    <div class="work-item" style="cursor:pointer;" onclick="window.open('https://youtu.be/28bG4QfHk3w','_blank')">
+      <img src="https://img.youtube.com/vi/28bG4QfHk3w/maxresdefault.jpg" alt="能登観光PR" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+      <div class="work-overlay">
+        <div class="work-category">Sound Producer / GO TO NOTO</div>
+        <div class="work-name">能登観光PR</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="categories">
+  <div class="reveal">
+    <div class="section-label">// 003 — Services</div>
+  </div>
+  <div class="cat-grid reveal" style="grid-template-columns: repeat(6,1fr);">
+    <div class="cat-item">
+      <div class="cat-number">01</div>
+      <div class="cat-title">VIDEO</div>
+      <div class="cat-desc">CM・プロモーション映像・MV・イベント記録。企画から編集まで。</div>
+    </div>
+    <div class="cat-item">
+      <div class="cat-number">02</div>
+      <div class="cat-title">MUSIC</div>
+      <div class="cat-desc">楽曲制作・サウンドデザイン・映像用BGM。</div>
+    </div>
+    <div class="cat-item" style="cursor:pointer;" onclick="window.open('./imaziation_web_lp.html','_blank')" onmouseover="this.style.background='rgba(200,245,66,0.05)'" onmouseout="this.style.background=''">
+      <div class="cat-number">03</div>
+      <div class="cat-title">WEB</div>
+      <div class="cat-desc">コーポレートサイト・LP・ブランドサイト。デザインから公開まで。</div>
+      <div style="margin-top:16px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.15em;color:var(--accent);">料金プランを見る →</div>
+    </div>
+    <div class="cat-item">
+      <div class="cat-number">04</div>
+      <div class="cat-title">DESIGN<br>/ PHOTO</div>
+      <div class="cat-desc">ビジュアルデザイン・ユニフォーム・ルック撮影・ブランドビジュアル。</div>
+    </div>
+    <div class="cat-item">
+      <div class="cat-number">05</div>
+      <div class="cat-title">BRAND</div>
+      <div class="cat-desc">世界観設計・ブランディング・空間プロデュース。</div>
+    </div>
+    <div class="cat-item">
+      <div class="cat-number">06</div>
+      <div class="cat-title">SNS</div>
+      <div class="cat-desc">Instagram・X・YouTube運用。投稿設計から分析まで月次サポート。</div>
+    </div>
+  </div>
+</section>
+
+<!-- CLIENTS -->
+<section class="clients">
+  <div class="reveal">
+    <div class="section-label">// 004 — Clients</div>
+    <h2 class="clients-title">TRUSTED<br>BY</h2>
+  </div>
+  <div class="clients-list reveal">
+    <div class="client-item">BEAMS</div>
+    <div class="client-item">ふくべ鍛治</div>
+    <div class="client-item">手取川 / 吉田酒造店</div>
+    <div class="client-item">DJ IZOH — DMC WORLD CHAMPION</div>
+    <div class="client-item">珠洲市</div>
+    <div class="client-item">梅田サイファー / KOPERU</div>
+    <div class="client-item">DJ SPI-K</div>
+    <div class="client-item">VAPING APE TOKYO</div>
+    <div class="client-item">Dr.EAST</div>
+    <div class="client-item">大阪ガスサービスショップ</div>
+    <div class="client-item">株式会社ハイロープ</div>
+    <div class="client-item">Gallery Cafe KAKERU</div>
+    <div class="client-item">TAW（Trash Art Works）</div>
+    <div class="client-item">暁 Antique</div>
+    <div class="client-item">NOTONOWILD</div>
+    <div class="client-item">DOYA COFFEE</div>
+    <div class="client-item">illr</div>
+  </div>
+</section>
+
+<!-- OUR BUSINESSES -->
+<section style="padding:100px 48px; border-top:1px solid var(--mid);">
+  <div class="reveal">
+    <div class="section-label">// 005 — Our Businesses</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,6vw,96px);line-height:0.9;margin-bottom:56px;">WHAT WE<br>RUN</h2>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:2px;margin-bottom:2px;" class="reveal">
+
+    <div style="background:var(--gray);padding:48px 36px;border:1px solid var(--mid);transition:background 0.3s;cursor:pointer;" onclick="window.open('https://www.instagram.com/komolebi_life','_blank')" onmouseover="this.style.background='rgba(200,245,66,0.03)'" onmouseout="this.style.background='var(--gray)'">
+      <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.25em;color:var(--accent);margin-bottom:20px;">01 / RESTAURANT & CAFE</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:0.05em;margin-bottom:16px;">KOMOLEBI</div>
+      <div style="font-size:12px;color:rgba(240,237,232,0.5);line-height:1.9;letter-spacing:0.03em;">
+        大阪府摂津市千里丘のカフェ・ダイニング。<br>
+        スパイスカレー、ドーナツ、コーヒー。<br>
+        食と音楽、アートが交差するカルチャースポット。
+      </div>
+      <div style="margin-top:24px;font-family:'Space Mono',monospace;font-size:10px;color:rgba(200,245,66,0.4);letter-spacing:0.1em;">OSAKA, SENRIOKA → Instagram ↗</div>
+    </div>
+
+    <div style="background:var(--gray);padding:48px 36px;border:1px solid var(--mid);position:relative;transition:background 0.3s;" onmouseover="this.style.background='rgba(200,245,66,0.03)'" onmouseout="this.style.background='var(--gray)'">
+      <div style="position:absolute;top:24px;right:24px;background:var(--accent);color:var(--black);font-family:'Space Mono',monospace;font-size:9px;padding:4px 12px;letter-spacing:0.15em;font-weight:bold;">COMING SOON</div>
+      <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.25em;color:var(--accent);margin-bottom:20px;">02 / NIGHT BAR</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:0.05em;margin-bottom:16px;">スタンド<br>コモレビ</div>
+      <div style="font-size:12px;color:rgba(240,237,232,0.5);line-height:1.9;letter-spacing:0.03em;">
+        気軽に立ち寄れる、この街の行きつけ。<br>
+        仕事帰りでも、ふらっとでも。<br>
+        お酒と音楽と、いい時間がある夜。<br>
+        2026年5月オープン予定。
+      </div>
+      <div style="margin-top:24px;font-family:'Space Mono',monospace;font-size:10px;color:rgba(200,245,66,0.4);letter-spacing:0.1em;">OSAKA, SENRIOKA</div>
+    </div>
+
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:2px;" class="reveal">
+
+    <div style="background:var(--gray);padding:48px 36px;border:1px solid var(--mid);transition:background 0.3s;" onmouseover="this.style.background='rgba(200,245,66,0.03)'" onmouseout="this.style.background='var(--gray)'">
+      <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.25em;color:var(--accent);margin-bottom:20px;">03 / STUDIO</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:0.05em;margin-bottom:16px;">STUDIO<br>LIMES</div>
+      <div style="font-size:12px;color:rgba(240,237,232,0.5);line-height:1.9;letter-spacing:0.03em;">
+        KOMOLEBIビル2Fのレコーディング・撮影スタジオ。<br>
+        アーティストの制作活動を<br>
+        トータルでサポートする空間。
+      </div>
+      <div style="margin-top:24px;font-family:'Space Mono',monospace;font-size:10px;color:rgba(200,245,66,0.4);letter-spacing:0.1em;">2F / KOMOLEBI BLDG</div>
+    </div>
+
+    <div style="background:var(--gray);padding:48px 36px;border:1px solid var(--mid);transition:background 0.3s;cursor:pointer;" onclick="window.open('https://www.instagram.com/komolebi_seitai','_blank')" onmouseover="this.style.background='rgba(200,245,66,0.03)'" onmouseout="this.style.background='var(--gray)'">
+      <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.25em;color:var(--accent);margin-bottom:20px;">04 / WELLNESS</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:0.05em;margin-bottom:16px;">木漏日<br>整体院</div>
+      <div style="font-size:12px;color:rgba(240,237,232,0.5);line-height:1.9;letter-spacing:0.03em;">
+        ただ癒すのではなく、丁寧に向き合う。<br>
+        一人ひとりの体の声に耳を傾け、<br>
+        本来の状態へと、静かに、確かに整えていく。<br>
+        それが、木漏日整体院の仕事です。
+      </div>
+      <div style="margin-top:24px;font-family:'Space Mono',monospace;font-size:10px;color:rgba(200,245,66,0.4);letter-spacing:0.1em;">2F / KOMOLEBI BLDG → Instagram ↗</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="reveal">
+    <div class="section-label">// 006 — Contact</div>
+    <h2 class="contact-title">LET'S<br><span class="accent">WORK</span><br>TOGETHER</h2>
+    <p class="contact-sub">
+      映像・音楽・Web・SNS・ブランディング、何でもご相談ください。<br>
+      単発案件からトータルプロデュースまで対応します。
+    </p>
+    <a href="mailto:imaziation@gmail.com" class="cta-btn">お問い合わせ</a>
+  </div>
+
+  <div class="contact-info reveal">
+    <div class="contact-row">
+      <div class="contact-label">Company</div>
+      <div class="contact-value">株式会社 imaziation</div>
+    </div>
+    <div class="contact-row">
+      <div class="contact-label">Location</div>
+      <div class="contact-value">大阪府摂津市千里丘</div>
+    </div>
+    <div class="contact-row">
+      <div class="contact-label">Instagram</div>
+      <div class="contact-value">@imaziation.inc</div>
+    </div>
+    <div class="contact-row">
+      <div class="contact-label">Service</div>
+      <div class="contact-value">Video / Music / Web / SNS</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">IMAZIATION INC.</div>
+  <div class="footer-copy">© 2026 株式会社imaziation. All rights reserved.</div>
+  <div class="footer-sns">
+    <a href="https://www.instagram.com/imaziation.inc" target="_blank">Instagram</a>
+  </div>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx - 5 + 'px';
+    cursor.style.top = my - 5 + 'px';
+  });
+
+  function animRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx - 18 + 'px';
+    ring.style.top = ry - 18 + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
